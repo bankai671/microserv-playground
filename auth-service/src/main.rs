@@ -1,23 +1,32 @@
 use axum::{
-    routing::get,
-    Router
+    routing::{
+        get,
+        post,
+    },
+    Router,
 };
 
-use tracing::info;
+use dotenv::dotenv;
+
+mod auth;
 
 #[tokio::main]
 async fn main() {
+    dotenv().ok();
+
+    let host_name = std::env::var("HOST_URL").unwrap_or("0.0.0.0".to_string());
+    let port = std::env::var("PORT").unwrap_or("3001".to_string());
+
     tracing_subscriber::fmt::init();
-    let num: usize = num_cpus::get();
 
-    let app = Router::new()
-        .route("/", get(root));
+    let app: _ = Router::new()
+        .route("/", get(|| async {
+            "Hello from / endpoint"
+        }))
+        .route("/register", post(auth::register));
 
-    let listner = tokio::net::TcpListener::bind("0.0.0.0:3001").await.unwrap();
-    info!("Server is running on port 3001!, with {num} cpus");
-    axum::serve(listner, app).await.unwrap();
+    let listener = tokio::net::TcpListener::bind(format!("{host_name}:{port}")).await.unwrap();
+
+    axum::serve(listener, app).await.unwrap()
 }
 
-async fn root () -> &'static str {
-    "hello from / endpoint\n"
-}
