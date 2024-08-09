@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build: 
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: "auth-service"
+    env_file:
+      - ./auth-service/.env
+    depends_on:
+      - redis
+    ports:
+      - "8001:8001"
+    networks:
+      - microserv-playground
+
+  redis:
+    image: "redis:latest"
+    container_name: "redis-service"
+    ports:
+      - "6379:6379"
+    networks:
+      - microserv-playground
+
+networks:
+  microserv-playground:
+    driver: bridge
