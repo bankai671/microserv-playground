@@ -1,9 +1,12 @@
+use std::sync::Arc;
 use axum::{
     Json,
-    http::StatusCode
+    http::StatusCode,
+    extract::State
 };
 use crate::utils::{self};
 use crate::model::{RegisterDto, LoginDto, LoginResponse, ErrorMessage};
+use crate::AppState;
 
 pub async fn register (
     Json(payload): Json<RegisterDto>
@@ -23,6 +26,7 @@ pub async fn register (
 }
 
 pub async fn login (
+    State(app_state): State<Arc<AppState>>,
     Json(_payload): Json<LoginDto>
 ) -> Result<(StatusCode, Json<LoginResponse>), (StatusCode, Json<ErrorMessage>)> {
     // TODO:
@@ -30,8 +34,8 @@ pub async fn login (
     // compare password and hash
     // in future add email verefication
 
-    let access_token = utils::generate_access_token().await;
-    let refresh_token = utils::generate_refresh_token().await;
+    let access_token = utils::generate_access_token(&app_state.env.jwt_secret).await;
+    let refresh_token = utils::generate_refresh_token(&app_state.env.jwt_secret).await;
 
     // save token to redis - (key) token - (value) user_id
 
