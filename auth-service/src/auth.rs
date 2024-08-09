@@ -34,8 +34,8 @@ pub async fn login (
     // compare password and hash
     // in future add email verefication
 
-    let access_token = utils::generate_access_token(&app_state.env.jwt_secret).await;
-    let refresh_token = utils::generate_refresh_token(&app_state.env.jwt_secret).await;
+    let access_token = utils::generate_access_token("uid", &app_state.env.jwt_secret).await;
+    let refresh_token = utils::generate_refresh_token("uid2", &app_state.env.jwt_secret).await;
 
     // save token to redis - (key) token - (value) user_id
 
