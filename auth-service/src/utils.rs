@@ -1,14 +1,9 @@
 use argon2;
-use rand::{
-    Rng,
-    distributions::Alphanumeric
-};
+use rand::Rng;
 use jsonwebtoken::{
     Header,
     EncodingKey,
 };
-use uuid::Uuid;
-
 use crate::model::TokenClaims;
 
 pub fn hash_password (password: &str) -> Result<String, argon2::Error> {
@@ -28,18 +23,14 @@ pub fn verify_password (hash: &str, password: &str) -> Result<bool, argon2::Erro
     argon2::verify_encoded(hash, password.as_bytes())
 }
 
-pub async fn generate_access_token () -> String {
+pub async fn generate_access_token (uid: &str, jwt_secret: &str) -> String {
     let now = chrono::Utc::now();
     let exp = (now + chrono::Duration::hours(4)).timestamp() as usize;
-    
-    let sub = Uuid::new_v4();
-
+ 
     let claims = TokenClaims {
-        sub: sub.to_string(),
+        sub: uid.to_string(),
         exp
     };
-
-    let jwt_secret = std::env::var("JWT_SECRET").unwrap();
 
     let token = jsonwebtoken::encode(
         &Header::default(),
@@ -50,6 +41,6 @@ pub async fn generate_access_token () -> String {
     token
 }
 
-pub async fn generate_refresh_token () -> String {
-    Uuid::new_v4().to_string()
+pub async fn generate_refresh_token (uid: &str, jwt_secret: &str) -> String {
+    generate_access_token(uid, jwt_secret).await
 }
