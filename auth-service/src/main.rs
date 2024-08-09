@@ -5,10 +5,11 @@ use axum::{
     },
     Router,
 };
-
 use dotenv::dotenv;
 
 mod auth;
+mod model;
+mod utils;
 
 #[tokio::main]
 async fn main() {
@@ -19,11 +20,12 @@ async fn main() {
 
     tracing_subscriber::fmt::init();
 
-    let app: _ = Router::new()
+    let app = Router::new()
         .route("/", get(|| async {
             "Hello from / endpoint"
         }))
-        .route("/register", post(auth::register));
+        .route("/register", post(auth::register))
+        .route("/login", post(auth::login));
 
     let listener = tokio::net::TcpListener::bind(format!("{host_name}:{port}")).await.unwrap();
 
