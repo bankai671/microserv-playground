@@ -5,7 +5,7 @@ services:
     build: 
       context: ./auth-service
       dockerfile: Dockerfile
-    container_name: "auth-service"
+    container_name: auth-service
     env_file:
       - ./auth-service/.env
     depends_on:
@@ -15,9 +15,30 @@ services:
     networks:
       - microserv-playground
 
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    depends_on:
+      - db
+    ports:
+      - "8002:8002"
+    networks:
+      - microserv-playground
+
+  db:
+    image: postgres
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: testpass
+    networks:
+      - microserv-playground
+
   redis:
-    image: "redis:latest"
-    container_name: "redis-service"
+    image: redis:latest
+    container_name: redis-service
     ports:
       - "6379:6379"
     networks:
@@ -26,3 +47,4 @@ services:
 networks:
   microserv-playground:
     driver: bridge
+
