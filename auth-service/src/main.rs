@@ -32,7 +32,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(|| async {
-            "Hello from / endpoint"
+            "Hello from auth-service / endpoint, port 8001"
         }))
         .route("/register", post(auth::register))
         .route("/login", post(auth::login))
