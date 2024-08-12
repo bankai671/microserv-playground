@@ -5,13 +5,13 @@
 package user
 
 import (
-	"database/sql"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type User struct {
-	ID        int32        `json:"id"`
-	Email     string       `json:"email"`
-	Username  string       `json:"username"`
-	Password  string       `json:"password"`
-	CreatedAt sql.NullTime `json:"created_at"`
+	ID        int32              `json:"id"`
+	Email     string             `json:"email"`
+	Username  string             `json:"username"`
+	Password  string             `json:"password"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }

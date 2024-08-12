@@ -10,3 +10,4 @@ sql:
         emit_json_tags: true
         emit_prepared_queries: true
         emit_interface: false
+        sql_package: "pgx/v5"
