@@ -20,6 +20,8 @@ services:
       context: ./user-service
       dockerfile: Dockerfile
     container_name: user-service
+    environment:
+      DB_URL: postgresql://user:password@postgres-db:5432/db
     depends_on:
       - db
     ports:
