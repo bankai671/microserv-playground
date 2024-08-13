@@ -1,14 +1,16 @@
 package router
 
 import (
-    "github.com/bankai671/microserv-playground/user-service/handler"
-    "github.com/gofiber/fiber/v3"
+	"github.com/bankai671/microserv-playground/user-service/handler"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/logger"
 )
 
 func SetupRoutes(app *fiber.App) {
-    app.Get("/", func (c fiber.Ctx) error {
-        return c.SendString("hello from user-service / endpoint, port 8002")
-    })
-
-    app.Post("/user", handler.CreateUser)
+    app.Use(logger.New())
+    app.Get("/", handler.HealthCheck)
+    app.Get("/users", handler.GetUsers)
+    app.Post("/users", handler.CreateUser)
+    app.Get("/users/:id", handler.GetUserByID)
+    app.Delete("/users/:id", handler.DeleteUser)
 }
