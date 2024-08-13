@@ -1,0 +1,13 @@
+version: '3'
+
+env:
+  DB_URL: postgresql://user:password@localhost:5432/db?sslmode=disable
+  MIGRATIONS_PATH: ./database/migrations
+tasks:
+  migrate-up:
+    cmd:
+      migrate -database $DB_URL -path $MIGRATIONS_PATH up
+  migrate-down:
+    cmd:
+      migrate -database $DB_URL -path $MIGRATIONS_PATH down
+
