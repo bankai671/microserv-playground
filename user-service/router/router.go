@@ -2,7 +2,6 @@ package router
 
 import (
     "github.com/bankai671/microserv-playground/user-service/handler"
-
     "github.com/gofiber/fiber/v3"
 )
 
