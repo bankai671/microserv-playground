@@ -6,7 +6,7 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY *.go .
+COPY . .
 
 RUN go build -o user-service main.go
 
