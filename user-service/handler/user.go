@@ -2,7 +2,8 @@ package handler
 
 import (
 	"log"
-    "strconv"
+	"strconv"
+	"time"
 	"github.com/bankai671/microserv-playground/user-service/database"
 	"github.com/bankai671/microserv-playground/user-service/database/sqlc"
 	"github.com/gofiber/fiber/v3"
@@ -12,6 +13,14 @@ type CreateUserRequest struct {
     Email       string  `json:"email"`
     Username    string  `json:"username"`
     Password    string  `json:"password"`
+}
+
+type GetUserResponse struct {
+    ID          int32   `json:"id"`
+    Email       string  `json:"email"`
+    Username    string  `json:"username"`
+    Password    string  `json:"password"`
+    CreatedAt   string  `json:"created_at"`
 }
 
 func GetUsers(c fiber.Ctx) error {
@@ -24,7 +33,13 @@ func GetUsers(c fiber.Ctx) error {
             return c.Status(fiber.StatusNotFound).SendString("User not found!")
         }
 
-        return c.Status(fiber.StatusOK).JSON(user)
+        return c.Status(fiber.StatusOK).JSON(GetUserResponse {
+            ID: user.ID,
+            Email: user.Email,
+            Username: user.Username,
+            Password: user.Password,
+            CreatedAt: user.CreatedAt.Time.Format(time.RFC3339),
+        })
     }
 
     users, err := database.Queries.GetAllUsers(c.Context())
