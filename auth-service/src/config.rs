@@ -3,7 +3,8 @@ pub struct Config {
     pub host: String,
     pub port: String,
     pub jwt_secret: String,
-    pub redis_port: String
+    pub redis_port: String,
+    pub user_service_url: String
 }
 
 impl Config {
@@ -12,12 +13,14 @@ impl Config {
         let port = std::env::var("PORT").unwrap_or("8009".to_string());
         let jwt_secret = std::env::var("JWT_SECRET").unwrap_or("ebal rot etogo rusta".to_string());
         let redis_port = std::env::var("REDIS_PORT").unwrap_or("6379".to_string());
+        let user_service_url = std::env::var("USER_SERVICE_URL").unwrap_or("http://user-service:8002".to_string());
 
         Self {
             host,
             port,
             jwt_secret,
-            redis_port
+            redis_port,
+            user_service_url
         }
     }
 }
