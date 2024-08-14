@@ -31,3 +31,20 @@ pub struct TokenClaims {
     pub sub: String,
     pub exp: usize
 }
+
+#[derive(Serialize, Debug)]
+pub struct CreateUserRequestDto {
+    pub email: String,
+    pub username: String,
+    pub password: String
+}
+
+#[derive(Deserialize, Debug)]
+pub struct User {
+    pub id: i32,
+    pub email: String,
+    pub username: String,
+    pub password: String,
+    pub created_at: String,
+}
+
