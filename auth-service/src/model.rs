@@ -5,7 +5,6 @@ pub struct RegisterDto {
     pub email: String,
     pub username: String,
     pub password: String,
-    pub confirm_password: String
 }
 
 #[derive(Deserialize, Debug)]
@@ -46,5 +45,21 @@ pub struct User {
     pub username: String,
     pub password: String,
     pub created_at: String,
+}
+
+#[derive(Deserialize)]
+pub struct RefreshTokenRequest {
+    pub refresh_token: String,
+}
+
+#[derive(Serialize)]
+pub struct RefreshTokenResponse {
+    pub access_token: String,
+    pub refresh_token: String,
+}
+
+#[derive(Deserialize)]
+pub struct LogoutRequest {
+    pub access_token: String,
 }
 

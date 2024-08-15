@@ -13,11 +13,13 @@ use axum::{
 use dotenv::dotenv;
 use config::Config;
 use std::sync::Arc;
-use reqwest::Client;
+use reqwest::Client as HttpClient;
+use crate::utils::RedisStore;
 
 pub struct AppState {
     pub env: Config,
-    pub client: Client
+    pub http_client: HttpClient,
+    pub redis_store: RedisStore
 }
 
 #[tokio::main]
@@ -25,13 +27,15 @@ async fn main() {
     dotenv().ok();
     
     let config = Config::init();
-    let client = Client::new();
+    let http_client = HttpClient::new();
+    let redis_store = RedisStore::new(&config.redis_url).await;
 
     let app_state = Arc::new(AppState {
         env: config.clone(),
-        client,
+        http_client,
+        redis_store
     });
-
+    
     tracing_subscriber::fmt().with_max_level(tracing::Level::DEBUG).init();
 
     let app = Router::new()
@@ -40,6 +44,8 @@ async fn main() {
         }))
         .route("/register", post(auth::register))
         .route("/login", post(auth::login))
+        .route("/logout", post(auth::logout))
+        .route("/refresh-token", post(auth::refresh_token))
         .with_state(app_state);
     
     let addr = format!("{}:{}", config.host, config.port);
