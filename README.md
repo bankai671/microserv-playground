@@ -7,9 +7,13 @@
 - **`auth-service/`**
   - **`.env`**
  
-### and run
+### Using docker
 ```
 docker compose up --build
+```
+### Using podman
+```
+podman-compose up --build
 ```
 
 ### enjoy :P
