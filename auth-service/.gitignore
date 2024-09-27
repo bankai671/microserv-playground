@@ -1,2 +1,6 @@
 /target
 .env
+login.sh
+logout.sh
+register.sh
+refresh-token.sh
